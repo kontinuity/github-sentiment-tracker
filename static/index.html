@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <title>Sentiment Tracker</title>
+    <meta name="description" content="">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css?family=Francois+One|Open+Sans:400italic,400,800" rel="stylesheet">
+
+    <style>@charset "UTF-8";
+    .index {
+        text-align: center
+    }
+
+    .index h1 b, .index h2 b {
+        display: block
+    }
+
+    #livesearch, article div.more .links, article > header .name, body, input {
+        margin: 0
+    }
+
+    article, footer, header, section {
+        display: block
+    }
+
+    html {
+        font-size: 100%;
+        overflow-y: scroll;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%
+    }
+
+    body, input {
+        font-family: sans-serif;
+        color: #e3d7bf
+    }
+
+    ::-moz-selection {
+        background: #fe57a1;
+        color: #fff;
+        text-shadow: none
+    }
+
+    ::selection {
+        background: #fe57a1;
+        color: #fff;
+        text-shadow: none
+    }
+
+    a {
+        color: #149cd7;
+        text-decoration: none
+    }
+
+    a:focus {
+        outline: thin dotted
+    }
+
+    a:active, a:hover {
+        outline: 0;
+        text-decoration: underline
+    }
+
+    b {
+        font-weight: 700
+    }
+
+    code, pre {
+        font-family: monospace, monospace;
+        font-size: 1em
+    }
+
+    pre {
+        white-space: pre;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        border: 1px solid #999;
+        background: #f0f0f0;
+        page-break-inside: avoid;
+        border-radius: 3px;
+        padding: 10px 5px;
+    }
+
+    img {
+        border: 0;
+        -ms-interpolation-mode: bicubic;
+        vertical-align: middle
+    }
+
+    input {
+        font-size: 100%;
+        vertical-align: baseline
+    }
+
+    input {
+        line-height: normal
+    }
+
+    input[type=button], input[type=reset], input[type=submit] {
+        cursor: pointer;
+        -webkit-appearance: button
+    }
+
+    input[type=search] {
+        -moz-box-sizing: content-box;
+        -webkit-box-sizing: content-box;
+        box-sizing: content-box;
+        -webkit-appearance: textfield
+    }
+
+    input[type=search]::-webkit-search-decoration {
+        -webkit-appearance: none
+    }
+
+    input[type=search]::-webkit-search-cancel-button {
+        -webkit-appearance: none
+    }
+
+    input::-moz-focus-inner {
+        border: 0;
+        padding: 0
+    }
+
+    input:invalid {
+        background-color: #f0dddd
+    }
+
+    * {
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box
+    }
+
+    html {
+        background-image: url(./denim.png);
+        color: #e3d7bf;
+        min-height: 100%;
+        max-width: 100%;
+        font: 16px/1.5 "Open Sans", sans-serif;
+        background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjIwZW0iIGN5PSIyMGVtIiByPSIxMCUiPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzIwN2NjYSIgc3RvcC1vcGFjaXR5PSIwLjA5OTk5OTk5OTk5OTk5OTk4Ii8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMjA3Y2NhIiBzdG9wLW9wYWNpdHk9IjAuMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==), url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjMwZW0iIGN5PSIzMGVtIiByPSI1JSI+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjY2Q1YzVjIiBzdG9wLW9wYWNpdHk9IjAuMTk5OTk5OTk5OTk5OTk5OTYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNjZDVjNWMiIHN0b3Atb3BhY2l0eT0iMC4wIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g), url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjYwZW0iIGN5PSI0MGVtIiByPSIxNSUiPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjA5OTk5OTk5OTk5OTk5OTk4Ii8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMCIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==), url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjQwZW0iIGN5PSI2MGVtIiByPSI1JSI+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMjA3Y2NhIiBzdG9wLW9wYWNpdHk9IjAuMTk5OTk5OTk5OTk5OTk5OTYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyMDdjY2EiIHN0b3Atb3BhY2l0eT0iMC4wIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g), url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjM1ZW0iIGN5PSI0NWVtIiByPSI3JSI+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMDAwMDAwIiBzdG9wLW9wYWNpdHk9IjAuMTk5OTk5OTk5OTk5OTk5OTYiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMC4wIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4g), url(./denim.png), #232927;
+        background: -moz-radial-gradient(20em 20em, circle cover, rgba(32, 124, 202, .1) 10em, rgba(32, 124, 202, 0) 10em), -moz-radial-gradient(30em 30em, circle cover, rgba(205, 92, 92, .2) 5em, rgba(205, 92, 92, 0) 5em), -moz-radial-gradient(60em 40em, circle cover, rgba(255, 255, 255, .1) 15em, rgba(255, 255, 255, 0) 15em), -moz-radial-gradient(40em 60em, circle cover, rgba(32, 124, 202, .2) 5em, rgba(32, 124, 202, 0) 5em), -moz-radial-gradient(35em 45em, circle cover, rgba(0, 0, 0, .2) 7em, rgba(0, 0, 0, 0) 7em), url(./denim.png), #232927;
+        background: -webkit-radial-gradient(20em 20em, circle cover, rgba(32, 124, 202, .1) 10em, rgba(32, 124, 202, 0) 10em), -webkit-radial-gradient(30em 30em, circle cover, rgba(205, 92, 92, .2) 5em, rgba(205, 92, 92, 0) 5em), -webkit-radial-gradient(60em 40em, circle cover, rgba(255, 255, 255, .1) 15em, rgba(255, 255, 255, 0) 15em), -webkit-radial-gradient(40em 60em, circle cover, rgba(32, 124, 202, .2) 5em, rgba(32, 124, 202, 0) 5em), -webkit-radial-gradient(35em 45em, circle cover, rgba(0, 0, 0, .2) 7em, rgba(0, 0, 0, 0) 7em), url(./denim.png), #232927;
+        background: radial-gradient(circle cover at 20em 20em, rgba(32, 124, 202, .1) 10em, rgba(32, 124, 202, 0) 10em), radial-gradient(circle cover at 30em 30em, rgba(205, 92, 92, .2) 5em, rgba(205, 92, 92, 0) 5em), radial-gradient(circle cover at 60em 40em, rgba(255, 255, 255, .1) 15em, rgba(255, 255, 255, 0) 15em), radial-gradient(circle cover at 40em 60em, rgba(32, 124, 202, .2) 5em, rgba(32, 124, 202, 0) 5em), radial-gradient(circle cover at 35em 45em, rgba(0, 0, 0, .2) 7em, rgba(0, 0, 0, 0) 7em), url(./denim.png), #232927
+    }
+
+    body {
+        max-width: 70%;
+        margin: 3em auto;
+        min-width: 60%
+    }
+
+    #main {
+        display: none;
+    }
+
+    .index {
+        text-shadow: 1px 1px 1px #0c0d0d
+    }
+
+    .index h1 {
+        font-size: 3em;
+        line-height: 1.2em;
+        text-shadow: 1px 1px 1px #e88860, 2px 2px 1px #e88860, 3px 3px 1px #e88860, 3px 3px 1px #0c0d0d, 4px 4px 3px #0c0d0d;
+        margin: .1em 0 .5em 0;
+        text-transform: uppercase;
+        font-family: "Francois One", sans-serif;
+        font-weight: 400
+    }
+
+    .index h1 img {
+        vertical-align: -10%;
+        width: 64px;
+        height: 64px
+    }
+
+    .index h2 {
+        font-size: 1em;
+        margin: 0 auto;
+        max-width: 38em;
+        font-weight: 400;
+        text-transform: none;
+        font-style: normal
+    }
+
+    .index h2 b {
+        margin-bottom: .5em;
+        color: #e88860;
+        font-size: 2em;
+        line-height: 1;
+        font-family: "Francois One", sans-serif;
+        font-weight: 400
+    }
+
+    .index h1 b {
+        font-family: "Open Sans", sans-serif;
+        line-height: 1
+    }
+
+    .index > div {
+        padding: 2rem 0
+    }
+
+    #livesearch {
+        width: 50%;
+        padding: 0 1em;
+        height: 3rem;
+        background: #fff;
+        border-radius: 10em;
+        border: 0;
+        outline: 0;
+        color: #000;
+        z-index: 1
+    }
+
+    #livesearch.error-state {
+        border: 3px solid red;
+    }
+
+    #livesearch:focus {
+        box-shadow: 0 0 .5em #6c2b10
+    }
+
+    #livesearch {
+        display: inline-block;
+        vertical-align: bottom;
+        position: relative
+    }
+
+    article {
+        color: #232927;
+        margin-bottom: 2em
+    }
+
+    article .tags {
+        display: none
+    }
+
+    article > header {
+        background: #d3e0e4;
+        border-radius: .3rem;
+        position: relative;
+        z-index: 1;
+        -moz-transition: background-color .1s ease-in;
+        -o-transition: background-color .1s ease-in;
+        -webkit-transition: background-color .1s ease-in;
+        transition: background-color .1s ease-in
+    }
+
+    article > header:before {
+        display: none;
+        vertical-align: middle;
+        content: "+";
+        line-height: 1;
+        font-size: 1.5rem;
+        border-radius: 1.5rem;
+        height: 1.5rem;
+        width: 1.5rem;
+        margin: 0 .5rem 0 1rem;
+        text-align: center;
+        color: #fff;
+        text-shadow: 1px 1px 1px #476871;
+        background: #b4cad0;
+        border: 1px solid #95b4bc;
+        -moz-transition: all .1s ease-in;
+        -o-transition: all .1s ease-in;
+        -webkit-transition: all .1s ease-in;
+        transition: all .1s ease-in
+    }
+
+    article > header .name {
+        font-size: 1.2rem;
+        padding: 0.5em;
+        color: #107aa8;
+        text-shadow: 0 1px 0 white;
+    }
+
+    article > header b {
+        font-weight: 400
+    }
+
+    article div.more {
+        background: #fff;
+        border-radius: 0 0 .3rem .3rem;
+        padding: .5em 1em 1.5em 1em;
+        margin: -.3rem 1px 0 1px;
+        position: relative;
+        z-index: 0;
+        box-shadow: 0 0 7px #0c0d0d;
+        -moz-transition: opacity 1s ease-in;
+        -o-transition: opacity 1s ease-in;
+        -webkit-transition: opacity 1s ease-in;
+        transition: opacity 1s ease-in
+    }
+
+    article div.more .links {
+        font-size: .8em;
+        position: absolute;
+        bottom: .5em;
+        right: 1em;
+        display: none;
+    }
+
+    article div.more .links a {
+        padding: .25em .5em
+    }
+
+    article div.more .links a:hover {
+        background: #149cd7;
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+        text-shadow: 1px 1px 1px #232927
+    }
+
+    .name {
+        padding: .4rem 0;
+        color: #107aa8
+    }
+
+    .submit-repo {
+        font-size: 2.1rem;
+        color: #e3d7bf;
+        background-color: orange;
+        padding: 10px;
+        border-radius: 10px
+    }
+
+    .submit-repo:hover {
+        color: #fff;
+        text-decoration: none
+    }
+
+    body > footer {
+        text-align: center;
+        padding: 3em 0;
+        font-size: .8em;
+        text-shadow: 1px 1px 1px #232927
+    }
+
+    code {
+        border-radius: 3px;
+        padding: 0 2px;
+        -moz-transition: all .3s ease-in;
+        -o-transition: all .3s ease-in;
+        -webkit-transition: all .3s ease-in;
+        transition: all .3s ease-in
+    }
+
+    .loader {
+        width: 100%;
+        display: none;
+        justify-content: center;
+    }
+
+    .lds-ripple {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+
+    .lds-ripple div {
+        position: absolute;
+        border: 4px solid #cef;
+        opacity: 1;
+        border-radius: 50%;
+        animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+
+    .lds-ripple div:nth-child(2) {
+        animation-delay: -0.5s;
+    }
+
+    @keyframes lds-ripple {
+        0% {
+            top: 36px;
+            left: 36px;
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+        100% {
+            top: 0px;
+            left: 0px;
+            width: 72px;
+            height: 72px;
+            opacity: 0;
+        }
+    }
+
+    @media only screen and (max-width: 680px) {
+        html {
+            font-size: 13px
+        }
+
+        body {
+            max-width: 90%
+        }
+
+        article > header h2.name {
+            padding-left: .5em;
+            margin-right: -100%
+        }
+
+        article > header::before {
+            display: none
+        }
+
+        .index h2 {
+            max-width: 100%
+        }
+    }
+
+    @media only screen and (min-width: 1400px) {
+        body {
+            max-width: 1070px;
+            min-width: initial
+        }
+    }
+
+    @media print {
+        * {
+            background: 0 0 !important;
+            color: #000 !important;
+            text-shadow: none !important;
+            filter: none !important;
+            -ms-filter: none !important
+        }
+
+        a, a:visited {
+            text-decoration: underline
+        }
+
+        a[href]:after {
+            content: " (" attr(href) ")"
+        }
+
+        a[href^="#"]:after, a[href^="javascript:"]:after {
+            content: ""
+        }
+
+        pre {
+            border: 1px solid #999;
+            background: #f0f0f0;
+            page-break-inside: avoid;
+            border-radius: 3px;
+            padding: 10px 5px;
+        }
+
+        img {
+            page-break-inside: avoid
+        }
+
+        img {
+            max-width: 100% !important
+        }
+
+        @page {
+            margin: .5cm
+        }
+
+        h2, h3, p {
+            orphans: 3;
+            widows: 3
+        }
+
+        h2, h3 {
+            page-break-after: avoid
+        }
+    }</style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetchival/0.3.2/index.min.js"
+            integrity="sha512-O1STcttvO+9kXN79/aNIClcc/2xxp90rc2DT2hh38ugf7170ao0mpeeneVqw54kTudR/q//GgjwYeuyo+w3VIQ==" crossorigin="anonymous"></script>
+    <script type="application/javascript">
+        function selectText(node) {
+            if (document.body.createTextRange) {
+                const range = document.body.createTextRange();
+                range.moveToElementText(node);
+                range.select();
+            } else if (window.getSelection) {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(node);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            } else {
+                console.warn("Could not select text in node: Unsupported browser.");
+            }
+        }
+
+        function submitRepo(ele, fromButton) {
+            const repoName = ele.value;
+
+            if (fromButton && repoName.length === 0) {
+                ele.classList.add('error-state');
+                return;
+            }
+
+            if (repoName.length > 0 && repoName.indexOf('/') === -1) {
+                ele.classList.add('error-state');
+                return;
+            }
+
+            ele.classList.remove('error-state');
+
+            if (event.key !== 'Enter' && !fromButton) {
+                return;
+            }
+
+            document.getElementById('main').style.display = 'none';
+            document.getElementById('submit-container').style.display = 'none';
+            document.getElementsByClassName('loader')[0].style.display = 'flex';
+            fetch('/gh/submit/repo', {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    gh_repo_name: repoName,
+                })
+            })
+                .then(function (response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response.json()
+                    }
+                    throw new Error(response.statusText)
+                })
+                .then(function (json) {
+                    let epurl = `https://your-domain/s?gh_repo_name=${repoName}`;
+                    let shurl = `https://img.shields.io/endpoint?url=${encodeURIComponent(epurl)}`;
+                    document.getElementById('snippet-markdown').innerText = `![Custom badge](${shurl})`;
+                    document.getElementById('snippet-url').innerText = shurl;
+                    document.getElementById('snippet-html').innerText = `<img alt="Custom badge" src="${shurl}">`;
+                    document.getElementById('snippet-restext').innerText = `.. image:: ${shurl}   :alt: Custom badge`;
+                    document.getElementById('snippet-asciidoc').innerText = `image:${shurl}[Custom badge]`;
+                    document.getElementById('badge-container').innerHTML = `<img alt="Custom badge" src="${shurl}&style=for-the-badge">`;
+                    document.getElementById('main').style.display = 'block';
+                })
+                .catch(function () {
+                    document.getElementById('main').style.display = 'none';
+                })
+                .finally(function () {
+                    document.getElementById('submit-container').style.display = 'block';
+                    document.getElementsByClassName('loader')[0].style.display = 'none';
+                });
+        }
+    </script>
+</head>
+<body id="gfs">
+<header class="index">
+    <h1>Sentiment <img src="./gh-logo.png" alt="Github Logo"> Tracker</h1>
+    <h2>
+        <b>Enter your github repository name</b>
+        <div>
+            <pre style="background: transparent; border: transparent">e.g. octocat/hello-world</pre>
+        </div>
+    </h2>
+    <div>
+        <input id="livesearch" class="search" name="livesearch" placeholder="Enter your github repo name" type="search" value="" autofocus
+               onkeydown="submitRepo(this, false)"/>
+    </div>
+    <h1 id="submit-container"><a href="#" class="submit-repo" onclick="submitRepo(document.getElementById('livesearch'), true)">Submit</a></h1>
+</header>
+<div class="loader">
+    <div class="lds-ripple">
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<div id="main" role="main">
+    <section class="features list" id="badge-container" style="margin: 10px auto;width: 100%; display: flex; justify-content: center;">
+    </section>
+    <section class="features list">
+        <article class="gtie8 polyfill">
+            <header>
+                <h2 class="name">Markdown</h2>
+            </header>
+            <div class="more">
+                <div class="recco">
+                    <p>
+                    <pre><code onmouseover="selectText(this)" id="snippet-markdown"></code></pre>
+                    </p>
+                </div>
+                <p class="links">
+                    <a href="#">Copy</a>
+                </p>
+            </div>
+            <footer class="tags">gtie8 polyfill</footer>
+        </article>
+        <article class="gtie8 polyfill">
+            <header>
+                <h2 class="name">URL</h2>
+            </header>
+            <div class="more">
+                <div class="recco">
+                    <p>
+                    <pre><code onmouseover="selectText(this)" id="snippet-url"></code></pre>
+                    </p>
+                </div>
+                <p class="links">
+                    <a href="#">Copy</a>
+                </p>
+            </div>
+            <footer class="tags">gtie8 polyfill</footer>
+        </article>
+        <article class="gtie8 polyfill">
+            <header>
+                <h2 class="name">HTML</h2>
+            </header>
+            <div class="more">
+                <div class="recco">
+                    <p>
+                    <pre><code onmouseover="selectText(this)" id="snippet-html"></code></pre>
+                    </p>
+                </div>
+                <p class="links">
+                    <a href="#">Copy</a>
+                </p>
+            </div>
+            <footer class="tags">gtie8 polyfill</footer>
+        </article>
+        <article class="gtie8 polyfill">
+            <header>
+                <h2 class="name">reStructured Text</h2>
+            </header>
+            <div class="more">
+                <div class="recco">
+                    <p>
+                    <pre><code onmouseover="selectText(this)" id="snippet-restext"></code></pre>
+                    </p>
+                </div>
+                <p class="links">
+                    <a href="#">Copy</a>
+                </p>
+            </div>
+            <footer class="tags">gtie8 polyfill</footer>
+        </article>
+        <article class="gtie8 polyfill">
+            <header>
+                <h2 class="name">AsciiDoc</h2>
+            </header>
+            <div class="more">
+                <div class="recco">
+                    <p>
+                    <pre><code onmouseover="selectText(this)" id="snippet-asciidoc"></code></pre>
+                    </p>
+                </div>
+                <p class="links">
+                    <a href="#">Copy</a>
+                </p>
+            </div>
+            <footer class="tags">gtie8 polyfill</footer>
+        </article>
+    </section>
+</div>
+<footer>
+</footer>
+</body>
+<script>
+
+</script>
+</html>

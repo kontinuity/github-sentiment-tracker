@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "app_function": "app.app",
+    "aws_region": "your-region",
+    "profile_name": "your-profile",
+    "project_name": "your-project-name",
+    "runtime": "python3.8",
+    "s3_bucket": "your-s3-bucket-name",
+    "keep_warm": true,
+    "memory_size": 128,
+    "num_retained_versions": 1,
+    "timeout_seconds": 60,
+    "domain": "your-domain"
+  }
+}
